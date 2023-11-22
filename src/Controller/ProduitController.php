@@ -17,9 +17,19 @@ class ProduitController extends AbstractController
     #[Route('/produit', name: 'produit.index')] // Ajout de l'annotation Route avec l'importation correcte
     public function index(): Response
     {
-        dump($this->produitRepository->findAll());
+        // dump($this->produitRepository->findAll());
         return $this->render('produit/index.html.twig', [
             'produits' => $this->produitRepository->findAll()  //Pour afficher des views on dois faire un tableau en utilisans une fonction findall
         ]);
+    }
+    // On creer une nouvelle route pour afficher les information de détails du produits
+    #[Route('/produits/{id}' , name:'produit.details')]
+    public function details(int $id):Response
+    {
+        // dd($this->produitRepository->find($id));
+        return $this->render('produit/details.html.twig', [
+            'produit' => $this->produitRepository->find($id),
+        ]); // Ce code affiche la vue des détails lorsqu'on clique
+
     }
 }

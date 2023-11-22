@@ -1,10 +1,21 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <p> <h1>Bonjour Monsieur</p>
     <div class="col">
-        <h2>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil culpa exercitationem blanditiis
-             odio molestias vitae quibusdam cum qui inventore obcaecati quas facere, iste, illo 
-             cupiditate, distinctio vel aliquam minima ad!</h2>
+        <h2>La description des produits</h2> <br>
+    </div>
+    <div class="card-body"> </div>
+    <div class="row">
+        {% for produit in produits %}
+            <div class="col-4">
+                <img src="{{ asset('images/' ~ produit.image) }}" alt="{{ produit.name }}" height="110" width="100" class="img-fluid">
+                <h3>{{ produit.name }}</h3>
+                <p>{{ produit.price | number_format(2, ',', ' ') }} EUR</p>
+                <p>
+                    <!-- cette partie permet de preparer un lien de détails des produits lorsqu'on clique sur un lien -->
+                    <a href="{{ url('produit.details', {'id': produit.id}) }}" class="btn btn-info">Détails</a>
+                </p>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

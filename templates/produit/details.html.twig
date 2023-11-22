@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<br><br>
+<div class="row">
+    <div class="col-2">
+        <img src="{{ asset('images/' ~ produit.image) }}" alt="{{ produit.name }}" height="200" width="200" class="card-img-top">
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">{{ produit.name }}</h3>
+        <p class="card-text">{{ produit.description }}</p>
+        <div class="card-text">
+            <p>Prix: {{ produit.price | number_format(2, ',', ' ') }} EUR</p>
+            <p>
+                {% if produit.quantity == 0 %}
+                    Unavailable product
+                {% else %}
+                    Quantity: {{ produit.quantity }}
+                {% endif %}
+            </p>
+            <p>
+                <a href="{{ path('produit.index') }}" class="btn btn-info">Liste des produits</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
