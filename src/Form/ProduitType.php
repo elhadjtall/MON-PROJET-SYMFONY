@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Produit;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -61,11 +63,22 @@ class ProduitType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('image', TextType::class, [
+            // Ceci est le code de la gestion des images dans le formulaire
+            ->add('image', FileType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Télécharger une image est requis'
                     ]),
+                    // Contraintes pour les images de precisions
+                    new Image([
+                        // Ceci defini le type de message generer 
+                        'mimeTypesMessage' => " Le format de l'image n'est pas autorité",
+                        'mimeTypes' => [ 'image/jpeg', 'image/gif', 'image/png' ]
+                        // Lorsqu'on teste dans le navigateur, il nous envoie un message d'erreurs pour installer un composer voir la note de symfony
+                        // La commande à executer : composer req mime
+                        // Lorsqu'on telecherge l'image dans la liste des tableaux, on ne voit pas l'image afficher 
+                        // Cela est dû à une modification dans le dossier src/ Entity = fichier php : Produit.php dans le code image (string voir le code)
+                    ])
                 ],
             ]);
     }

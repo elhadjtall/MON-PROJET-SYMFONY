@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProduitRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
@@ -27,7 +28,9 @@ class Produit
     private ?int $quantity = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    // On modifie ce code pour permettre à l'affichage de l'image
+    // Pour la clé privée
+    private UploadedFile|null|string $image = null;
 
     public function getId(): ?int
     {
@@ -81,13 +84,15 @@ class Produit
 
         return $this;
     }
-
-    public function getImage(): ?string
+    //Modifier ce code et l'adapter en fonction du code en bas 
+    public function getImage():UploadedFile|null|string
     {
         return $this->image;
     }
-
-    public function setImage(string $image): static
+    // On modifier le code pour permettre à l'affichage de l'image donc on ajoute les fonctions suivants 
+    // null et UploadedFile
+    // Une fois le code est modifier il faut aller dans le fichier ProduitController.php du dossier admin
+    public function setImage(null|string|UploadedFile $image): static
     {
         $this->image = $image;
 

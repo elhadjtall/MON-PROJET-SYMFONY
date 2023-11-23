@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\ByteString;
 
 #[Route('/admin')]
 class ProduitController extends AbstractController
@@ -50,7 +51,13 @@ class ProduitController extends AbstractController
 
         //Si le formulaire est valide et soumis
         if($form->isSubmitted() && $form->isValid()){
-            // dd($entity);
+            // Gestion de l'image dans le dossier
+            // ByteString::fromRandom : c'est une classe qui permet de generer une chaine de caractère
+            $filname = ByteString::fromRandom(32)->lower();
+            // Acceder à la classe UploadedFile à partir de la propriété image de l'entité
+            $file = $entity->getImage();
+            // dd permet d'afficher de façon code le resultat
+            dd($file, $entity);
             // Inserer les données dans la base de données
             $this->entityManager->persist($entity);
             //Ajouter cette fonction pour pouvoir supprimer les produits
