@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Produit; // Il faut imporeter le produit n'oublie pas toujours l'importation
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ class ProduitController extends AbstractController
     //Ripository permet d'acceder au contenu d'une base de données
     // On injecte notre produit qui nous concerne en utilisant la fonction construct
     // Recuperer la requette HTTP en Symfony on utilise la fonction requestStack
-    public function __construct(private ProduitRepository $produitRepository , private RequestStack $requestStack)
+    public function __construct(private ProduitRepository $produitRepository , private RequestStack $requestStack, private EntityManagerInterface $entityManager,)
     {
         
     }
@@ -41,7 +42,10 @@ class ProduitController extends AbstractController
 
         //Si le formulaire est valide et soumis
         if($form->isSubmitted() && $form->isValid()){
-            dd($entity);
+            // dd($entity);
+            // Inserer les données dans la base de données
+            $this->entityManager->persist($entity);
+            $this->entityManager->flush();
         }
 
         return $this->render('admin/produit/form.html.twig', [
