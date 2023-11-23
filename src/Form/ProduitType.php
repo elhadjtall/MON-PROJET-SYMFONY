@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Validator\Constraints\PositiveOrZero;
 
 class ProduitType extends AbstractType
 {
@@ -41,6 +42,7 @@ class ProduitType extends AbstractType
                         'message' => 'Le montant doit être positif'
                     ]),
                 ],
+                'invalid_message' => 'Le prix doit toujours être en chiffre' // Ceci est un contrainte de message
             ])
             ->add('description', TextareaType::class, [
                 'constraints' => [
@@ -48,12 +50,14 @@ class ProduitType extends AbstractType
                         'message' => 'La description est requise'
                     ]),
                 ],
-                'invalid_message' => 'Le prix doit toujours être en chiffre'
             ])
             ->add('quantity', IntegerType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => 'La quantité est requise'
+                    ]),
+                    new PositiveOrZero([ // Cette fonction sert à dire que la quantity doit être positive
+                        'message' => 'La quantité doivent pas être positive '
                     ]),
                 ],
             ])
