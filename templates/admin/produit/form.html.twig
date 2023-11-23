@@ -2,8 +2,12 @@
 
 {% block body %}
 <h1>Gestion de stocks</h1>
+<!-- La desactivation de la validation du  -->
+<!-- {attr: { novalidate: 'novalidate'},})}}  -->
+
 <!-- Ceci est un formulaire en symfony surtout n'oublie pas de definir les entity de la base ceci dans le controler -->
-{{ form_start(form)}}
+{{ form_start(form, {
+    attr: { novalidate: 'novalidate'},})}} 
 <p>
     {{ form_label(form.name, 'Nom: ')}}
     {{form_widget(form.name)}}
