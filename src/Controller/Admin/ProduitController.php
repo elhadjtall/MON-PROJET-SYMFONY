@@ -7,6 +7,7 @@ use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,11 +33,13 @@ class ProduitController extends AbstractController
     #[Route('/produit/update/{id}', name: 'admin.produit.update')]
     // La route creer par l'identifiant id sera mis dans les acolates de form en variable ensuite lui donnée une valeur
     // Donc on aura : public function form( int $id = null): Response
+    //Si l'id à une valeur, on est entrain de modifier, si non c'est le contraire
     public function form( int $id = null): Response
     {
         // Creation d'un formulaire
         // Pour cela on creer les entity
-        $entity = new Produit();
+        //Ici qu'on verifie si l'id à une valeur
+        $entity = $id ? $this->produitRepository->find($id) : new Produit();
         $type = ProduitType::class;
         $form = $this->createForm($type, $entity);
 
@@ -51,7 +54,8 @@ class ProduitController extends AbstractController
             $this->entityManager->flush();
 
             // Afficher un message de confirmation
-            $message = 'Produit Ajouter';
+            // Ici on modifie le message qu'on envoie car si l'id à une valeur on est entrain de modifier si non on est ajoute
+            $message = $id ? 'Produit Modifier' : 'Produit created';
             // Message flash : message stocké en session, supprimé suite à son affichage
             $this->addFlash('notice', $message);
 
@@ -62,5 +66,21 @@ class ProduitController extends AbstractController
         return $this->render('admin/produit/form.html.twig', [
             'form' => $form->createView(), //Ce code transforme ce code en pur html
         ]);
+    }
+    // On creer une nouvelle route pour le bouton de suppression
+    #[Route('/produit/delete/{id}', name: 'admin.produit.delete')]
+    // Creer une fonction public pour envoyer une reponse de redirection
+    public function delete (int $id) :RedirectResponse 
+    {
+        // Selectionner l'entité à supprimer avec la fonction find
+        $entity = $this->produitRepository->find($id);
+        //Supprimer l'entité avec la fonction remove
+        $this->entityManager->remove($entity);
+        
+        // Il faut ajouter la fonction flush pour pouvoir supprimer un produit
+        $this->entityManager->flush();
+
+        // Redirection de la route vers la page admin 
+        return $this->redirectToRoute('admin.produit.index');
     }
 }
