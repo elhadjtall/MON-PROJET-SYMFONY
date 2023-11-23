@@ -65,13 +65,15 @@ class ProduitController extends AbstractController
                 // Pour l'extention du fichier de l'image à telecharger
                 // Donc on utilise la fonction guessClientExtension
                 $fileExtension = $file->guessClientExtension();
-                // Transferer l'image dans le dossier public de l'image
+                // Transferer l'image dans le dossier public/image
                 //La fonction move : permet le transfert de l'image
                 // Il ajouter la variable de l'extension qui est creer 
                 $file->move('images', "$filname.$fileExtension");
+                //Modifier la propriété de l'image de l'entité
+                $entity->setImage("$filname.$fileExtension");
             }
             // dd permet d'afficher de façon code le resultat
-            dd($file, $entity);
+            // dd($file, $entity);
 
             // Inserer les données dans la base de données
             $this->entityManager->persist($entity);
