@@ -7,6 +7,7 @@ use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,7 @@ class ProduitController extends AbstractController
         //Ici qu'on verifie si l'id à une valeur
         $entity = $id ? $this->produitRepository->find($id) : new Produit();
         $type = ProduitType::class;
+        // Ce code permet de creer le type de entity
         $form = $this->createForm($type, $entity);
 
         //Récuperer la saisie précédente dans la réquête http
@@ -51,21 +53,36 @@ class ProduitController extends AbstractController
 
         //Si le formulaire est valide et soumis
         if($form->isSubmitted() && $form->isValid()){
+
             // Gestion de l'image dans le dossier
             // ByteString::fromRandom : c'est une classe qui permet de generer une chaine de caractère
             $filname = ByteString::fromRandom(32)->lower();
             // Acceder à la classe UploadedFile à partir de la propriété image de l'entité
             $file = $entity->getImage();
+
+            //Si une image a été sélectionnée
+            if($file instanceof UploadedFile) {
+                // Pour l'extention du fichier de l'image à telecharger
+                // Donc on utilise la fonction guessClientExtension
+                $fileExtension = $file->guessClientExtension();
+                // Transferer l'image dans le dossier public de l'image
+                //La fonction move : permet le transfert de l'image
+                // Il ajouter la variable de l'extension qui est creer 
+                $file->move('images', "$filname.$fileExtension");
+            }
             // dd permet d'afficher de façon code le resultat
             dd($file, $entity);
+
             // Inserer les données dans la base de données
             $this->entityManager->persist($entity);
+
             //Ajouter cette fonction pour pouvoir supprimer les produits
             $this->entityManager->flush();
 
             // Afficher un message de confirmation
             // Ici on modifie le message qu'on envoie car si l'id à une valeur on est entrain de modifier si non on est ajoute
             $message = $id ? 'Produit Modifier' : 'Produit created';
+
             // Message flash : message stocké en session, supprimé suite à son affichage
             $this->addFlash('notice', $message);
 
@@ -79,11 +96,13 @@ class ProduitController extends AbstractController
     }
     // On creer une nouvelle route pour le bouton de suppression
     #[Route('/produit/delete/{id}', name: 'admin.produit.delete')]
+
     // Creer une fonction public pour envoyer une reponse de redirection
     public function delete (int $id) :RedirectResponse 
     {
         // Selectionner l'entité à supprimer avec la fonction find
         $entity = $this->produitRepository->find($id);
+
         //Supprimer l'entité avec la fonction remove
         $this->entityManager->remove($entity);
 
