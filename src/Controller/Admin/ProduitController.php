@@ -29,7 +29,10 @@ class ProduitController extends AbstractController
         ]);
     }
     #[Route('/produit/form', name: 'admin.produit.form')]
-    public function form(): Response
+    #[Route('/produit/update/{id}', name: 'admin.produit.update')]
+    // La route creer par l'identifiant id sera mis dans les acolates de form en variable ensuite lui donnée une valeur
+    // Donc on aura : public function form( int $id = null): Response
+    public function form( int $id = null): Response
     {
         // Creation d'un formulaire
         // Pour cela on creer les entity
