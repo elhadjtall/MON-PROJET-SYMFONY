@@ -1,5 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<h1>Gestion de stocks</h1>
+<!-- Ceci est un formulaire en symfony surtout n'oublie pas de definir les entity de la base ceci dans le controler -->
+{{ form_start(form)}}
+<p>
+    {{ form_label(form.name, 'Nom: ')}}
+    {{form_widget(form.name)}}
+</p>
+<p>
+    {{ form_label(form.price, 'Prix : ')}}
+    {{ form_widget(form.price)}}
+</p>
+<p>
+    {{ form_label(form.description, 'Description : ')}}
+    {{ form_widget(form.description)}}
+</p>
+<p>
+    {{form_label(form.quantity, 'Quantity: ')}}
+    {{form_widget(form.quantity)}}
+</p>
+<p>
+    {{form_label(form.image, 'Image: ')}}
+    {{form_widget(form.image)}}
+</p>
+<p>
+    <button type="submit" class="btn btn-primary">Envoyer</button>
+</p>
+{{form_end(form)}}
 
 {% endblock %}

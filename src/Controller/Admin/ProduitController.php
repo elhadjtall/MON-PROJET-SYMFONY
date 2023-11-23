@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Produit; // Il faut imporeter le produit n'oublie pas toujours l'importation
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +41,7 @@ class ProduitController extends AbstractController
 
         //Si le formulaire est valide et soumis
         if($form->isSubmitted() && $form->isValid()){
-            dd($entity)
+            dd($entity);
         }
 
         return $this->render('admin/produit/form.html.twig', [
