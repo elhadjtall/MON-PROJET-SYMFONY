@@ -29,7 +29,9 @@ class ProduitController extends AbstractController
             'produits' => $this->produitRepository->findAll(), // Ceci permet d'envoyer la vue c'est à dire faire apparaître les produits dans une page appeler index.
         ]);
     }
+    //La route pour les produits de l'administration
     #[Route('/produit/form', name: 'admin.produit.form')]
+    //La route pour les modifications des produits
     #[Route('/produit/update/{id}', name: 'admin.produit.update')]
     // La route creer par l'identifiant id sera mis dans les acolates de form en variable ensuite lui donnée une valeur
     // Donc on aura : public function form( int $id = null): Response
@@ -51,6 +53,7 @@ class ProduitController extends AbstractController
             // dd($entity);
             // Inserer les données dans la base de données
             $this->entityManager->persist($entity);
+            //Ajouter cette fonction pour pouvoir supprimer les produits
             $this->entityManager->flush();
 
             // Afficher un message de confirmation
@@ -76,7 +79,7 @@ class ProduitController extends AbstractController
         $entity = $this->produitRepository->find($id);
         //Supprimer l'entité avec la fonction remove
         $this->entityManager->remove($entity);
-        
+
         // Il faut ajouter la fonction flush pour pouvoir supprimer un produit
         $this->entityManager->flush();
 
