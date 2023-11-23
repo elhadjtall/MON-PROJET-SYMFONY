@@ -46,6 +46,14 @@ class ProduitController extends AbstractController
             // Inserer les données dans la base de données
             $this->entityManager->persist($entity);
             $this->entityManager->flush();
+
+            // Afficher un message de confirmation
+            $message = 'Produit Ajouter';
+            // Message flash : message stocké en session, supprimé suite à son affichage
+            $this->addFlash('notice', $message);
+
+            // redirection vers la page d'acceuil de l'admin qui gère les produits
+            return $this->redirectToRoute('admin.produit.index');
         }
 
         return $this->render('admin/produit/form.html.twig', [

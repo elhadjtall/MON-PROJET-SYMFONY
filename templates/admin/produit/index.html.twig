@@ -5,6 +5,10 @@
     <div class="row">
         <div class="col">
             <h1>Gestion de stocks</h1>
+            <!-- Message de confirmation stocké en session message flash  -->
+            {% for notice in app.flashes('notice') %}
+                <p class="alert alert-success">{{ notice}}</p>
+            {% endfor %}
             <p>
                 <a href="{{url('admin.produit.form')}}" class="btn btn-info">Ajouter</a>
             </p>
