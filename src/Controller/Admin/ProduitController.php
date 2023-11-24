@@ -45,6 +45,14 @@ class ProduitController extends AbstractController
         //Ici qu'on verifie si l'id à une valeur
         $entity = $id ? $this->produitRepository->find($id) : new Produit();
         $type = ProduitType::class;
+
+        //Conserver le nom de l'image du produit au cas où il n'y a pas de sélection d'image lors de la modification
+        // Pour cela on utilise une propriété dynamique d'un objet (à lire la documentation)
+        // Propriété prevImage ( est une propriété creer ici qui n'existe pas dans la base donc il sera exactement ici)
+        // On peut definir que la classe entity peut accepter des propriété dynamique
+        $entity->prevImage = $entity->getImage();
+        // dd($entity);
+
         // Ce code permet de creer le type de entity
         $form = $this->createForm($type, $entity);
 
@@ -62,9 +70,11 @@ class ProduitController extends AbstractController
 
             //Si une image a été sélectionnée
             if($file instanceof UploadedFile) {
+
                 // Pour l'extention du fichier de l'image à telecharger
                 // Donc on utilise la fonction guessClientExtension
                 $fileExtension = $file->guessClientExtension();
+
                 // Transferer l'image dans le dossier public/image
                 //La fonction move : permet le transfert de l'image
                 // Il ajouter la variable de l'extension qui est creer 
@@ -72,6 +82,13 @@ class ProduitController extends AbstractController
                 //Modifier la propriété de l'image de l'entité
                 $entity->setImage("$filname.$fileExtension");
             }
+            // Si une image n'a pas été selectionnée 
+            else {
+                // Recupèrer la valeur de la propriété prevImage
+                //La fonction setImage (modifie l'image)
+                $entity->setImage( $entity->prevImage);
+            }
+
             // dd permet d'afficher de façon code le resultat
             // dd($file, $entity);
 

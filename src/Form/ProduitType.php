@@ -21,6 +21,7 @@ class ProduitType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // dd($options);
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
@@ -65,7 +66,9 @@ class ProduitType extends AbstractType
             ])
             // Ceci est le code de la gestion des images dans le formulaire
             ->add('image', FileType::class, [
-                'constraints' => [
+                'data_class' => null,
+                //Si le produit est ajouté, ojout de contraintes sur le champ de sélection de fichier // si le produit est modifier, pas de contraintes
+                'constraints' => $options['data']->getId() ? [] : [
                     new NotBlank([
                         'message' => 'Télécharger une image est requis'
                     ]),

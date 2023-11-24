@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
 use App\Repository\ProduitRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
+// Ici on ajoute la propriété dynamique avec AllowDynamicProperties qui fait disparaisse le warning (c'est à dire le tiret rouge)
+#[AllowDynamicProperties]
 class Produit
 {
     #[ORM\Id]
