@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ContactRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
@@ -14,12 +15,12 @@ class Contact
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $suject = null;
-
-    #[ORM\Column(length: 155)]
-    private ?string $email = null;
+    private ?string $subject = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
 
     public function getId(): ?int
@@ -27,14 +28,14 @@ class Contact
         return $this->id;
     }
 
-    public function getSuject(): ?string
+    public function getSubject(): ?string
     {
-        return $this->suject;
+        return $this->subject;
     }
 
-    public function setSuject(string $suject): static
+    public function setSubject(string $subject): static
     {
-        $this->suject = $suject;
+        $this->subject = $subject;
 
         return $this;
     }

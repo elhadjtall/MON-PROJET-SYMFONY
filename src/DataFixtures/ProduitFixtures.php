@@ -29,7 +29,7 @@ class ProduitFixtures extends Fixture
         for ($i = 0; $i < 5; $i++) {
             $contact = new Contact();
             $contact
-                ->setSuject("Subject $i")
+                ->setSubject("Subject $i")
                 ->setEmail("email$i@example.com")
                 ->setMessage("Message $i");
             $manager->persist($contact);
