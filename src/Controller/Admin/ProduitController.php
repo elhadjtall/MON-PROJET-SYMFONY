@@ -85,10 +85,15 @@ class ProduitController extends AbstractController
 
                 //Modifier la propriété de l'image de l'entité
                 $entity->setImage("$filname.$fileExtension");
+
+                //On supprime l'ancienne image
+                // Pour cela on fait une condition if
+                // Pour supprimer une image en PHP on utilise la fonction unlick
+                if($id) unlink("images/{$entity->prevImage}");
             }
             // Si une image n'a pas été selectionnée 
             else {
-                
+
                 // Recupèrer la valeur de la propriété prevImage
                 //La fonction setImage (modifie l'image)
                 $entity->setImage( $entity->prevImage);
