@@ -33,8 +33,10 @@ class ProduitController extends AbstractController
     }
     //La route pour les produits de l'administration
     #[Route('/produit/form', name: 'admin.produit.form')]
+
     //La route pour les modifications des produits
     #[Route('/produit/update/{id}', name: 'admin.produit.update')]
+
     // La route creer par l'identifiant id sera mis dans les acolates de form en variable ensuite lui donnée une valeur
     // Donc on aura : public function form( int $id = null): Response
     //Si l'id à une valeur, on est entrain de modifier, si non c'est le contraire
@@ -65,6 +67,7 @@ class ProduitController extends AbstractController
             // Gestion de l'image dans le dossier
             // ByteString::fromRandom : c'est une classe qui permet de generer une chaine de caractère
             $filname = ByteString::fromRandom(32)->lower();
+
             // Acceder à la classe UploadedFile à partir de la propriété image de l'entité
             $file = $entity->getImage();
 
@@ -79,11 +82,13 @@ class ProduitController extends AbstractController
                 //La fonction move : permet le transfert de l'image
                 // Il ajouter la variable de l'extension qui est creer 
                 $file->move('images', "$filname.$fileExtension");
+
                 //Modifier la propriété de l'image de l'entité
                 $entity->setImage("$filname.$fileExtension");
             }
             // Si une image n'a pas été selectionnée 
             else {
+                
                 // Recupèrer la valeur de la propriété prevImage
                 //La fonction setImage (modifie l'image)
                 $entity->setImage( $entity->prevImage);
